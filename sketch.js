@@ -1,26 +1,48 @@
 // variables
+const canvasHeight = 400;
+const canvasWidth = 400;
+
 let isJumping = false;
 let jumpTime = 0;
-const jumpDuration = 60;
-const jumpHeight = 100;
+
+let player = {
+  yStart: canvasHeight - 100,
+  x: 50,
+  y: canvasHeight - 100,
+  size: 24,
+  jumpDuration: 60,
+  jumpHeight: 200,
+
+  display: function () {
+    noStroke();
+    fill(0, 0, 0);
+    circle(this.x, this.y, this.size);
+  },
+
+  update: function () {
+    if (isJumping) {
+      let jumpOffset = sin((jumpTime / this.jumpDuration) * PI) * this.jumpHeight;
+      this.y = this.yStart - jumpOffset;
+      jumpTime++;
+
+      if (jumpTime >= this.jumpDuration) {
+        isJumping = false;
+        jumpTime = 0;
+        this.y = this.yStart;
+      }
+    }
+  }
+};
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(canvasWidth, canvasHeight);
 }
 
 function draw() {
   background(220);
   scene();
-  player();
-
-  // update jump physics
-  if (isJumping) {
-    jumpTime++;
-    if (jumpTime >= jumpDuration) {
-      isJumping = false;
-      jumpTime = 0;
-    }
-  }
+  player.display();
+  player.update();
 }
 
 function scene() {
@@ -29,21 +51,7 @@ function scene() {
   line(0, height - 87, width, height - 88);
 }
 
-function player() {
-  let yPos = height - 100; // default y position
-
-  if (isJumping) {
-    let jumpOffset = sin((jumpTime / jumpDuration) * PI) * jumpHeight;
-    yPos -= jumpOffset;
-  }
-
-  // start player at bottom left of canvas
-  noStroke();
-  fill(0, 0, 0);
-  circle(50, yPos, 24);
-}
-
-function mouseClicked() {
+function mousePressed() {
   if (!isJumping) {
     isJumping = true;
     jumpTime = 0;
