@@ -1,16 +1,18 @@
 // variables
-const canvasHeight = 400;
-const canvasWidth = 400;
+const canvasHeight = 337.5;
+const canvasWidth = 600;
+
+let obsticles = [];
 
 let player = {
   yStart: canvasHeight - 100,
-  x: 50,
+  x: 100,
   y: canvasHeight - 100,
   size: 24,
   isJumping: false,
   jumpTime: 0,
   jumpDuration: 60,
-  jumpHeight: 200,
+  jumpHeight: 175,
 
   display: function () {
     push();
@@ -42,38 +44,28 @@ let player = {
   }
 };
 
-let object = {
-  w: 48,
-  h: 64,
-  xStart: canvasWidth + 16,
-  x: canvasWidth + 16,
-  y: canvasHeight - 100,
-
-  display: function () {
-    push();
-    stroke(0);
-    strokeWeight(2);
-    rect(this.x, canvasHeight - this.h - 88, this.w, this.h);
-    pop();
-  },
-
-  update: function () {
-    this.x = this.x - 3;
-    if (this.x < -this.w) {
-      this.x = this.xStart;
-    }
-  }
-};
-
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
+  rectMode(CENTER);
+  ellipseMode(CENTER);
 }
 
 function draw() {
   background(220);
   scene();
-  object.display();
-  object.update();
+
+  if (frameCount % 90 === 0) {
+    obsticles.push(new Obsticle());
+  }
+
+  for (let i = 0; i < obsticles.length; i++) {
+    if (obsticles[i].x < -obsticles[i].w) {
+      obsticles.slice(i, 1);
+    }
+    obsticles[i].display();
+    obsticles[i].update();
+  }
+
   player.display();
   player.update();
 }
@@ -84,6 +76,34 @@ function scene() {
   strokeWeight(1);
   line(0, canvasHeight - 88, canvasWidth, canvasHeight - 88);
   pop();
+}
+
+function Obsticle() {
+  this.w = 48;
+  this.h = 64;
+  this.x = canvasWidth + 16;
+  this.y = canvasHeight - 100;
+
+  this.display = function () {
+    push();
+    stroke(0);
+    strokeWeight(2);
+    rect(this.x, canvasHeight - this.h / 2 - 89, this.w, this.h);
+    pop();
+    // Collision with player
+    if (
+      player.x + player.size / 2 > this.x - this.w / 2 &&
+      player.x - player.size / 2 < this.x + this.w / 2 &&
+      player.y + player.size / 2 > this.y - this.h / 2
+    ) {
+      console.log("boop");
+      noLoop();
+    }
+  };
+
+  this.update = function () {
+    this.x = this.x - 3;
+  };
 }
 
 function mousePressed() {
