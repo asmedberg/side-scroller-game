@@ -21,14 +21,14 @@ let player = {
   },
 
   update: function () {
-    if (isJumping) {
-      let jumpOffset = sin((jumpTime / this.jumpDuration) * PI) * this.jumpHeight;
+    if (this.isJumping) {
+      let jumpOffset = sin((this.jumpTime / this.jumpDuration) * PI) * this.jumpHeight;
       this.y = this.yStart - jumpOffset;
-      jumpTime++;
+      this.jumpTime++;
 
-      if (jumpTime >= this.jumpDuration) {
-        isJumping = false;
-        jumpTime = 0;
+      if (this.jumpTime >= this.jumpDuration) {
+        this.isJumping = false;
+        this.jumpTime = 0;
         this.y = this.yStart;
       }
     }
