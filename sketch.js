@@ -42,6 +42,29 @@ let player = {
   }
 };
 
+let object = {
+  w: 48,
+  h: 64,
+  xStart: canvasWidth + 16,
+  x: canvasWidth + 16,
+  y: canvasHeight - 100,
+
+  display: function () {
+    push();
+    stroke(0);
+    strokeWeight(2);
+    rect(this.x, canvasHeight - this.h - 88, this.w, this.h);
+    pop();
+  },
+
+  update: function () {
+    this.x = this.x - 3;
+    if (this.x < -this.w) {
+      this.x = this.xStart;
+    }
+  }
+};
+
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
 }
@@ -49,15 +72,17 @@ function setup() {
 function draw() {
   background(220);
   scene();
+  object.display();
+  object.update();
   player.display();
   player.update();
 }
 
 function scene() {
   push();
+  stroke(0);
   strokeWeight(1);
-  stroke(0, 0, 0);
-  line(0, height - 87, width, height - 88);
+  line(0, canvasHeight - 88, canvasWidth, canvasHeight - 88);
   pop();
 }
 
