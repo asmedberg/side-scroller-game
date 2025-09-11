@@ -58,7 +58,7 @@ function draw() {
   Scene();
   Score();
 
-  if (frameCount % 90 === 0) {
+  if (frameCount % 60 === 0) {
     obsticles.push(new Obsticle());
   }
 
@@ -92,8 +92,8 @@ function Score() {
 function Obsticle() {
   this.w = random(32, 100);
   this.h = random(48, 100);
-  this.x = canvasWidth + 16;
-  this.y = canvasHeight - 100;
+  this.x = canvasWidth + this.w / 2;
+  this.y = random(165, canvasHeight - 100 - this.h / 2);
 
   this.potential = true;
 
@@ -101,7 +101,7 @@ function Obsticle() {
     push();
     stroke(0);
     strokeWeight(2);
-    rect(this.x, canvasHeight - this.h / 2 - 89, this.w, this.h);
+    rect(this.x, this.y, this.w, this.h);
     pop();
 
     // Add scoring
@@ -114,7 +114,8 @@ function Obsticle() {
     if (
       player.x + player.size / 2 > this.x - this.w / 2 &&
       player.x - player.size / 2 < this.x + this.w / 2 &&
-      player.y + player.size / 2 > this.y - this.h / 2
+      player.y + player.size / 2 > this.y - this.h / 2 &&
+      player.y - player.size / 2 < this.y + this.h / 2
     ) {
       console.log("boop");
       noLoop();
