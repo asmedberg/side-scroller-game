@@ -5,6 +5,7 @@ const canvasWidth = 600;
 let obsticles = [];
 
 let score = 0;
+let speed = 5;
 
 let player = {
   yStart: canvasHeight - 100,
@@ -89,8 +90,8 @@ function Score() {
 }
 
 function Obsticle() {
-  this.w = 48;
-  this.h = 64;
+  this.w = random(32, 100);
+  this.h = random(48, 100);
   this.x = canvasWidth + 16;
   this.y = canvasHeight - 100;
 
@@ -121,7 +122,7 @@ function Obsticle() {
   };
 
   this.update = function () {
-    this.x = this.x - 3;
+    this.x = this.x - speed;
   };
 }
 
