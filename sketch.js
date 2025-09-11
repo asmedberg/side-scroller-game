@@ -4,6 +4,8 @@ const canvasWidth = 600;
 
 let obsticles = [];
 
+let score = 0;
+
 let player = {
   yStart: canvasHeight - 100,
   x: 100,
@@ -52,7 +54,8 @@ function setup() {
 
 function draw() {
   background(220);
-  scene();
+  Scene();
+  Score();
 
   if (frameCount % 90 === 0) {
     obsticles.push(new Obsticle());
@@ -70,11 +73,18 @@ function draw() {
   player.update();
 }
 
-function scene() {
+function Scene() {
   push();
   stroke(0);
   strokeWeight(1);
   line(0, canvasHeight - 88, canvasWidth, canvasHeight - 88);
+  pop();
+}
+
+function Score() {
+  push();
+  textSize(20);
+  text(score, 10, 25);
   pop();
 }
 
@@ -84,12 +94,21 @@ function Obsticle() {
   this.x = canvasWidth + 16;
   this.y = canvasHeight - 100;
 
+  this.potential = true;
+
   this.display = function () {
     push();
     stroke(0);
     strokeWeight(2);
     rect(this.x, canvasHeight - this.h / 2 - 89, this.w, this.h);
     pop();
+
+    // Add scoring
+    if (this.potential && player.x - player.size / 2 > this.x + this.w / 2) {
+      score++;
+      this.potential = false;
+    }
+
     // Collision with player
     if (
       player.x + player.size / 2 > this.x - this.w / 2 &&
